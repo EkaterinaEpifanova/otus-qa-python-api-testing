@@ -3,11 +3,12 @@ This repository contains a collection of simple Python scripts created as part o
 
 ## 📚 Contents
 
-- More scripts coming soon as learning progresses...
+- This project contains automated tests for three public REST APIs:
+  - [Dog API](https://dog.ceo/dog-api/)
+  - [OpenBreweryDB API](https://www.openbrewerydb.org/)
+  - [JSONPlaceholder API](https://jsonplaceholder.typicode.com/)
 
-## 🛠 Skills Covered
-
-- 
+The tests are written using `pytest` and a custom `BaseService` class that provides a common wrapper for HTTP requests.
 
 ## ✅ Requirements
 
