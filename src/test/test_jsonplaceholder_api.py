@@ -2,10 +2,9 @@
 import pytest
 
 @pytest.mark.parametrize("request_id", [1, 50, 100])
-def test_get_post_by_id(service, json_placeholder_url, request_id):
-    """Post method by id"""
-    url = f"{json_placeholder_url}/posts/{request_id}"
-    response = service.get(url)
+def test_get_post_by_id(json_placeholder_service, request_id):
+    """Get method by id"""
+    response = json_placeholder_service.get(f"posts/{request_id}")
     assert response["id"] == request_id
 
 @pytest.mark.parametrize(
@@ -16,15 +15,14 @@ def test_get_post_by_id(service, json_placeholder_url, request_id):
         ("Third title", "Third body", 3),
     ]
 )
-def test_create_post(service, json_placeholder_url, title, body_text, user_id):
+def test_create_post(json_placeholder_service, title, body_text, user_id):
     """Post with different titles, bodies, and userIds"""
-    url = f"{json_placeholder_url}/posts"
     body = {
         "title": title,
         "body": body_text,
         "userId": user_id
     }
-    response = service.post(url, body)
+    response = json_placeholder_service.post(path = "posts", body= body)
 
     assert response is not None
     assert response["title"] == title
@@ -37,9 +35,8 @@ def test_create_post(service, json_placeholder_url, title, body_text, user_id):
         (1, "First title", "First body", 1)
     ]
 )
-def test_update_post(service, json_placeholder_url, request_id, title, body_text, user_id):
+def test_update_post(json_placeholder_service, request_id, title, body_text, user_id):
     """Update data using PUT request"""
-    url = f"{json_placeholder_url}/posts/1"
     body = {
         "id": request_id,
         "title": title,
@@ -47,7 +44,7 @@ def test_update_post(service, json_placeholder_url, request_id, title, body_text
         "userId": user_id
     }
     headers = {"Content-Type": "application/json"}
-    response = service.put(url, body, headers)
+    response = json_placeholder_service.put(path = "posts/1", body = body, headers = headers)
 
     assert response is not None
     assert response["id"] == request_id
@@ -56,10 +53,8 @@ def test_update_post(service, json_placeholder_url, request_id, title, body_text
     assert response["userId"] == user_id
 
 @pytest.mark.parametrize("request_id", [1])
-def test_delete_post(service, json_placeholder_url, request_id):
+def test_delete_post(json_placeholder_service, request_id):
     """Delete data"""
-    url = f"{json_placeholder_url}/posts/{request_id}"
     headers = {"Content-Type": "application/json"}
-    response = service.delete(url, headers)
-
+    response = json_placeholder_service.delete(path = f"posts/{request_id}", headers = headers)
     assert response == {}

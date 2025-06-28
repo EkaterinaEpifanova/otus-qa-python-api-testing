@@ -18,8 +18,16 @@ logger = create_logger()
 
 class BaseService:
     """Base API service behaviour"""
-    def delete(self, url, headers, timeout=10):
+    def __init__(self, base_url: str = ""):
+        self.base_url = base_url
+
+    def build_url(self, path: str) -> str:
+        """Build URL method"""
+        return f"{self.base_url}/{path.lstrip('/')}" if self.base_url else path
+
+    def delete(self, path, headers, timeout=10):
         """Delete method"""
+        url = self.build_url(path)
         try:
             response = requests.delete(url, headers=headers, timeout=timeout)
             response.raise_for_status()
@@ -27,11 +35,12 @@ class BaseService:
             return response.json()
         except requests.exceptions.RequestException as e:
             logger.error("Error. %s", str(e))
-            return None
+            raise
 
 
-    def post(self, url, body, timeout = 10):
+    def post(self, path, body, timeout = 10):
         """Post method"""
+        url = self.build_url(path)
         try:
             headers = {'accept': "application/json", 'Content-Type': 'application/json'}
             response = requests.post(url, data=json.dumps(body), headers=headers, timeout=timeout)
@@ -40,11 +49,12 @@ class BaseService:
             return response.json()
         except requests.exceptions.RequestException as e:
             logger.error("Error. %s", str(e))
-            return None
+            raise
 
 
-    def put(self, url, body, headers, timeout = 10):
+    def put(self, path, body, headers, timeout = 10):
         """Put method"""
+        url = self.build_url(path)
         try:
             response = requests.put(url, data=json.dumps(body), headers=headers, timeout=timeout)
             response.raise_for_status()
@@ -52,11 +62,12 @@ class BaseService:
             return response.json()
         except requests.exceptions.RequestException as e:
             logger.error("Error. %s", str(e))
-            return None
+            raise
 
 
-    def get(self, url, params=None, headers=None, timeout = 10):
+    def get(self, path, params=None, headers=None, timeout = 10):
         """Get method"""
+        url = self.build_url(path)
         try:
             response = requests.get(url, params=params, headers=headers, timeout=timeout)
             response.raise_for_status()
@@ -64,4 +75,4 @@ class BaseService:
             return response.json()
         except requests.exceptions.RequestException as e:
             logger.error("Error. %s", str(e))
-            return None
+            raise

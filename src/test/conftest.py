@@ -6,25 +6,21 @@ import pytest
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))
 from src.main.client.service import BaseService
 
-@pytest.fixture(scope="session")
-def service():
-    """Shared BaseService instance for API tests"""
-    return BaseService()
 
 @pytest.fixture
-def dog_api_url():
+def dog_api_client():
     """Dog URL"""
-    return "https://dog.ceo/api"
+    return BaseService("https://dog.ceo/api")
 
 @pytest.fixture
-def brewery_api_url():
+def brewery_api_service():
     """Brewery API URL"""
-    return "https://api.openbrewerydb.org/v1/breweries"
+    return BaseService("https://api.openbrewerydb.org")
 
 @pytest.fixture
-def json_placeholder_url():
+def json_placeholder_service():
     """Placeholder URL"""
-    return "https://jsonplaceholder.typicode.com"
+    return BaseService("https://jsonplaceholder.typicode.com")
 
 def pytest_addoption(parser):
     """
