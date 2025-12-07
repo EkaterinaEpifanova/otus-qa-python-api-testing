@@ -1,12 +1,15 @@
 """Json Placeholder API tests"""
+import allure
 import pytest
 
+@allure.step("Get method by id")
 @pytest.mark.parametrize("request_id", [1, 50, 100])
 def test_get_post_by_id(json_placeholder_service, request_id):
     """Get method by id"""
     response = json_placeholder_service.get(f"posts/{request_id}")
     assert response["id"] == request_id
 
+@allure.step("Post with different titles, bodies, and userIds")
 @pytest.mark.parametrize(
     "title, body_text, user_id",
     [
@@ -29,6 +32,7 @@ def test_create_post(json_placeholder_service, title, body_text, user_id):
     assert response["body"] == body_text
     assert response["userId"] == user_id
 
+@allure.step("Update data using PUT request")
 @pytest.mark.parametrize(
     "request_id, title, body_text, user_id",
     [
@@ -52,6 +56,7 @@ def test_update_post(json_placeholder_service, request_id, title, body_text, use
     assert response["body"] == body_text
     assert response["userId"] == user_id
 
+@allure.step("Delete data")
 @pytest.mark.parametrize("request_id", [1])
 def test_delete_post(json_placeholder_service, request_id):
     """Delete data"""

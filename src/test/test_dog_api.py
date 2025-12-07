@@ -1,7 +1,8 @@
 """Dog API tests"""
-
+import allure
 import pytest
 
+@allure.step("List all breeds")
 def test_list_all_breeds(dog_api_client):
     """List all breeds"""
     response = dog_api_client.get("breeds/list/all")
@@ -9,6 +10,7 @@ def test_list_all_breeds(dog_api_client):
     assert "message" in response
     assert "bulldog" in response["message"]
 
+@allure.step("Single random image from a breed collection")
 @pytest.mark.parametrize("breed", ["retriever", "bulldog", "poodle"])
 def test_get_random_image_by_breed(dog_api_client, breed):
     """Single random image from a breed collection"""
@@ -18,6 +20,7 @@ def test_get_random_image_by_breed(dog_api_client, breed):
     assert response["status"] == "success"
     assert breed in image_url.lower(), f"Breed '{breed}' not found in image URL: {image_url}"
 
+@allure.step("Single random image from a sub breed collection")
 @pytest.mark.parametrize("sub_breed", ["english", "french"])
 def test_sub_breed_images(dog_api_client, sub_breed):
     """Single random image from a sub breed collection"""
@@ -31,6 +34,7 @@ def test_sub_breed_images(dog_api_client, sub_breed):
         for img_url in image_urls
     ), f"Not all image URLs contain sub-breed '{sub_breed}'"
 
+@allure.step("Get all images of a specific breed")
 @pytest.mark.parametrize("breed", ["retriever"])
 def test_get_images_by_breed(dog_api_client, breed):
     """Get all images of a specific breed"""
@@ -44,6 +48,7 @@ def test_get_images_by_breed(dog_api_client, breed):
         for img_url in image_urls
     ), f"Not all image URLs contain sub-breed '{breed}'"
 
+@allure.step("Get random image by sub-breed")
 @pytest.mark.parametrize("breed,sub_breed", [
     ("bulldog", "english"),
     ("bulldog", "french"),
